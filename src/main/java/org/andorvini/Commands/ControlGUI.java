@@ -28,11 +28,18 @@ public class ControlGUI implements CommandExecutor {
 
         Player sender = (Player) commandSender;
 
-        ItemStack lever = new ItemStack(Material.LEVER);
-        ItemMeta leverMeta = lever.getItemMeta();
+        ItemStack startLever = new ItemStack(Material.LEVER);
+        ItemMeta leverMeta = startLever.getItemMeta();
         leverMeta.setDisplayName(ChatColor.GREEN + "Start game");
-        lever.setItemMeta(leverMeta);
-        controlGUI.setItem(13, lever);
+        startLever.setItemMeta(leverMeta);
+
+        ItemStack settingsRedstone = new ItemStack(Material.REDSTONE);
+        ItemMeta redstoneMeta = settingsRedstone.getItemMeta();
+        redstoneMeta.setDisplayName(ChatColor.YELLOW + "Settings");
+        settingsRedstone.setItemMeta(redstoneMeta);
+
+        controlGUI.setItem(12, settingsRedstone);
+        controlGUI.setItem(13, startLever);
 
         if (commandSender.isOp()) {
 
