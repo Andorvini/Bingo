@@ -51,7 +51,4 @@ public class ControlGUI implements CommandExecutor {
         return true;
     }
 
-    public Inventory getControlGUI() {
-        return controlGUI;
-    }
 }

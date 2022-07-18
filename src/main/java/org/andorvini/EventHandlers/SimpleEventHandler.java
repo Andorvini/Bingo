@@ -1,8 +1,8 @@
 package org.andorvini.EventHandlers;
 
 import org.andorvini.Commands.ControlGUI;
-
 import org.andorvini.GameController;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -33,11 +33,13 @@ public class SimpleEventHandler implements Listener {
             Timer gameStartTimer = new Timer();
             e.setCancelled(true);
             HumanEntity whoClicked = e.getWhoClicked();
-            whoClicked.closeInventory();
             if (e.getSlot() == 13) {
+
+                whoClicked.closeInventory();
                 gameStartTimer.scheduleAtFixedRate(new TimerTask() {
 
                     int i = 10;
+
                     @Override
                     public void run() {
                         if (i == 5) {
@@ -71,6 +73,8 @@ public class SimpleEventHandler implements Listener {
                     }
 
                 },0,1000);
+            } else if (e.getSlot() == 12) {
+
             }
         }
     }
