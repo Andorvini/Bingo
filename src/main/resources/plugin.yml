@@ -6,3 +6,6 @@
       controlpanel:
           description: Opens the control panel
           usage: /<command>
+      additem:
+          description: Adds item into array
+          usage: /<command>

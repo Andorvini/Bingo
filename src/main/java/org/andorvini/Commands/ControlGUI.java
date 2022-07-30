@@ -1,5 +1,6 @@
 package org.andorvini.Commands;
 
+import org.andorvini.GameController;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -11,6 +12,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ControlGUI implements CommandExecutor {
 
@@ -24,18 +28,19 @@ public class ControlGUI implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+
         if (strings.length != 0) { return false; }
 
         Player sender = (Player) commandSender;
 
         ItemStack startLever = new ItemStack(Material.LEVER);
         ItemMeta leverMeta = startLever.getItemMeta();
-        leverMeta.setDisplayName(ChatColor.GREEN + "Start game");
+        leverMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Start game");
         startLever.setItemMeta(leverMeta);
 
         ItemStack settingsRedstone = new ItemStack(Material.REDSTONE);
         ItemMeta redstoneMeta = settingsRedstone.getItemMeta();
-        redstoneMeta.setDisplayName(ChatColor.YELLOW + "Settings");
+        redstoneMeta.setDisplayName(ChatColor.YELLOW.toString() + ChatColor.BOLD + "Settings");
         settingsRedstone.setItemMeta(redstoneMeta);
 
         controlGUI.setItem(12, settingsRedstone);

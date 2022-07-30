@@ -2,16 +2,23 @@ package org.andorvini.EventHandlers;
 
 import org.andorvini.Commands.ControlGUI;
 import org.andorvini.GameController;
+import org.andorvini.ItemListLoad;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,18 +31,27 @@ public class SimpleEventHandler implements Listener {
         this.plugin = plugin;
     }
 
+    Inventory settingsInventory = Bukkit.createInventory(null, 27, "Settings");
+
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
+    public void onInventoryClick(InventoryClickEvent electronicArts) {
+
+        ArrayList<ItemStack> items = (ArrayList<ItemStack>) plugin.getConfig().get("items");
+
+        HumanEntity whoClicked1 = electronicArts.getWhoClicked();
 
         Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
 
-        if (e.getInventory().equals(ControlGUI.controlGUI)) {
-            Timer gameStartTimer = new Timer();
-            e.setCancelled(true);
-            HumanEntity whoClicked = e.getWhoClicked();
-            if (e.getSlot() == 13) {
+        if (electronicArts.getInventory().equals(ControlGUI.controlGUI)) {
 
-                whoClicked.closeInventory();
+            electronicArts.setCancelled(true);
+
+            Timer gameStartTimer = new Timer();
+
+            if (electronicArts.getSlot() == 13) {
+
+                whoClicked1.closeInventory();
+
                 gameStartTimer.scheduleAtFixedRate(new TimerTask() {
 
                     int i = 10;
@@ -44,38 +60,56 @@ public class SimpleEventHandler implements Listener {
                     public void run() {
                         if (i == 5) {
                             plugin.getServer().broadcastMessage(ChatColor.GREEN + "Игра начинается через 5");
-                        }
-                        else if (i == 4) {
+                        } else if (i == 4) {
                             plugin.getServer().broadcastMessage(ChatColor.GREEN + "Игра начинается через 4");
-                        }
-                        else if (i == 3) {
+                        } else if (i == 3) {
                             plugin.getServer().broadcastMessage(ChatColor.GREEN + "Игра начинается через 3");
-                        }
-                        else if (i == 2) {
+                        } else if (i == 2) {
                             plugin.getServer().broadcastMessage(ChatColor.GREEN + "Игра начинается через 2");
-                        }
-                        else if (i == 1) {
+                        } else if (i == 1) {
                             plugin.getServer().broadcastMessage(ChatColor.GREEN + "Игра начинается через 1");
-                        }
-                        else if (i == 0) {
+                        } else if (i == 0) {
                             plugin.getServer().broadcastMessage(ChatColor.YELLOW + "Игра начинается");
+
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    GameController.GameStart(players,plugin.getServer().getWorld("world"));
+                                    GameController.GameStart(players, plugin.getServer().getWorld("world"));
                                 }
                             }.runTask(plugin);
-                        }
-                        else if (i == -1) {
+
+                        } else if (i == -1) {
                             gameStartTimer.cancel();
                         }
                         i--;
                     }
 
-                },0,1000);
-            } else if (e.getSlot() == 12) {
+                }, 0, 1000);
+            } else if (electronicArts.getSlot() == 12) {
+
+                ItemStack listPaper = new ItemStack(Material.PAPER);
+                ItemMeta paperMeta = listPaper.getItemMeta();
+                paperMeta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "Items List");
+                listPaper.setItemMeta(paperMeta);
+
+                ItemStack randomToogleComparator = new ItemStack(Material.COMPARATOR);
+                ItemMeta comparatorMeta = randomToogleComparator.getItemMeta();
+                comparatorMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Toogle Random Item Choosing");
+                randomToogleComparator.setItemMeta(comparatorMeta);
+
+                settingsInventory.setItem(10,listPaper);
+                settingsInventory.setItem(11,randomToogleComparator);
+
+                whoClicked1.openInventory(settingsInventory);
 
             }
+        } else if (electronicArts.getInventory().equals(settingsInventory)) {
+            electronicArts.setCancelled(true);
+            if (electronicArts.getSlot() == 10) {
+                ItemListLoad.openItemListInventory(whoClicked1 , items);
+            }
+        } else if (electronicArts.getInventory().equals(ItemListLoad.itemListInventory)) {
+            electronicArts.setCancelled(true);
         }
     }
 }
