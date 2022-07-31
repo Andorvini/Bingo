@@ -18,10 +18,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class SimpleEventHandler implements Listener {
 
@@ -37,6 +34,24 @@ public class SimpleEventHandler implements Listener {
     public void onInventoryClick(InventoryClickEvent electronicArts) {
 
         ArrayList<ItemStack> items = (ArrayList<ItemStack>) plugin.getConfig().get("items");
+        boolean randomChoosing = plugin.getConfig().getBoolean("randomItemChoosing");
+
+        ItemStack listPaper = new ItemStack(Material.PAPER);
+        ItemMeta paperMeta = listPaper.getItemMeta();
+        paperMeta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "Items List");
+        listPaper.setItemMeta(paperMeta);
+
+        ItemStack randomToogleComparator = new ItemStack(Material.COMPARATOR);
+        ItemMeta comparatorMeta = randomToogleComparator.getItemMeta();
+        comparatorMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Toogle Random Item Choosing");
+
+        if (randomChoosing) {
+            comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Choosing randomly"})));
+        } else if (!randomChoosing) {
+            comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Admin is choosing"})));
+        }
+
+        randomToogleComparator.setItemMeta(comparatorMeta);
 
         HumanEntity whoClicked1 = electronicArts.getWhoClicked();
 
@@ -87,16 +102,6 @@ public class SimpleEventHandler implements Listener {
                 }, 0, 1000);
             } else if (electronicArts.getSlot() == 12) {
 
-                ItemStack listPaper = new ItemStack(Material.PAPER);
-                ItemMeta paperMeta = listPaper.getItemMeta();
-                paperMeta.setDisplayName(ChatColor.GOLD.toString() + ChatColor.BOLD + "Items List");
-                listPaper.setItemMeta(paperMeta);
-
-                ItemStack randomToogleComparator = new ItemStack(Material.COMPARATOR);
-                ItemMeta comparatorMeta = randomToogleComparator.getItemMeta();
-                comparatorMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Toogle Random Item Choosing");
-                randomToogleComparator.setItemMeta(comparatorMeta);
-
                 settingsInventory.setItem(10,listPaper);
                 settingsInventory.setItem(11,randomToogleComparator);
 
@@ -105,9 +110,25 @@ public class SimpleEventHandler implements Listener {
             }
         } else if (electronicArts.getInventory().equals(settingsInventory)) {
             electronicArts.setCancelled(true);
+
             if (electronicArts.getSlot() == 10) {
-                ItemListLoad.openItemListInventory(whoClicked1 , items);
+                ItemListLoad.openItemListInventory(whoClicked1, items);
+            } else if (electronicArts.getSlot() == 11) {
+
+                if (randomChoosing) {
+                    plugin.getConfig().set("randomItemChoosing", false);
+                    comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Admin is choosing"})));
+                    settingsInventory.setItem(11,randomToogleComparator);
+                    whoClicked1.openInventory(settingsInventory);
+                } else if (!randomChoosing) {
+                    plugin.getConfig().set("randomItemChoosing", true);
+                    comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Choosing randomly"})));
+                    settingsInventory.setItem(11,randomToogleComparator);
+                    whoClicked1.openInventory(settingsInventory);
+                }
+
             }
+
         } else if (electronicArts.getInventory().equals(ItemListLoad.itemListInventory)) {
             electronicArts.setCancelled(true);
         }

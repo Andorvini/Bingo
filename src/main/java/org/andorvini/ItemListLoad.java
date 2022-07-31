@@ -4,13 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 
 public class ItemListLoad {
-
-    //public static JavaPlugin plugin;
 
     public static Inventory itemListInventory = Bukkit.createInventory(null,54,"Item List");
 
@@ -25,6 +22,9 @@ public class ItemListLoad {
                 break;
             } else {
                 itemListInventory.setItem(i,item);
+            }
+            if (i == 44) {
+                break;
             }
             i++;
         }

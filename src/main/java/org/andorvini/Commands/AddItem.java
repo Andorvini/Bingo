@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,17 +20,17 @@ public class AddItem implements CommandExecutor {
         this.plugin = plugin;
     }
 
-    ArrayList<ItemStack> itemsCopy = Main.items;
-
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String pizda, String[] arguments) {
+        ArrayList<ItemStack> itemsCopy = Main.items;
 
         if (!(commandSender instanceof Player)) { return true; }
 
         if (strings.length != 0) { return false; }
 
         if (!commandSender.isOp()) {
-            commandSender.sendMessage(ChatColor.RED + "Вы не админ");
+            commandSender.sendMessage(ChatColor.RED + "Вы не админ (не смешарик)");
+
             return true;
         }
 

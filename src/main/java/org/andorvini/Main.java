@@ -14,10 +14,13 @@ public class Main extends JavaPlugin implements Listener {
 
     public static ArrayList<ItemStack> items = new ArrayList<>();
 
+    public static Main plugin;
+
     @Override
     public void onEnable() {
         
         // Variables and Arrays
+        plugin = this;
         ItemStack dirt = new ItemStack(Material.DIRT);
         ItemStack stone = new ItemStack(Material.STONE);
 
