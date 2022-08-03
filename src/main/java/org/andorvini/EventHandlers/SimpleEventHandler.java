@@ -1,6 +1,7 @@
 package org.andorvini.EventHandlers;
 
 import org.andorvini.Commands.ControlGUI;
+import org.andorvini.Configuration;
 import org.andorvini.GameController;
 import org.andorvini.ItemListLoad;
 
@@ -34,7 +35,6 @@ public class SimpleEventHandler implements Listener {
     public void onInventoryClick(InventoryClickEvent electronicArts) {
 
         ArrayList<ItemStack> items = (ArrayList<ItemStack>) plugin.getConfig().get("items");
-        boolean randomChoosing = plugin.getConfig().getBoolean("randomItemChoosing");
 
         ItemStack listPaper = new ItemStack(Material.PAPER);
         ItemMeta paperMeta = listPaper.getItemMeta();
@@ -45,27 +45,25 @@ public class SimpleEventHandler implements Listener {
         ItemMeta comparatorMeta = randomToogleComparator.getItemMeta();
         comparatorMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Toogle Random Item Choosing");
 
-        if (randomChoosing) {
+        if (Configuration.randomChoosing) {
             comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Choosing randomly"})));
-        } else if (!randomChoosing) {
+        } else if (!Configuration.randomChoosing) {
             comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Admin is choosing"})));
         }
 
         randomToogleComparator.setItemMeta(comparatorMeta);
 
-        HumanEntity whoClicked1 = electronicArts.getWhoClicked();
-
+        HumanEntity whoClicked = electronicArts.getWhoClicked();
         Collection<? extends Player> players = plugin.getServer().getOnlinePlayers();
 
         if (electronicArts.getInventory().equals(ControlGUI.controlGUI)) {
 
             electronicArts.setCancelled(true);
-
             Timer gameStartTimer = new Timer();
 
             if (electronicArts.getSlot() == 13) {
 
-                whoClicked1.closeInventory();
+                whoClicked.closeInventory();
 
                 gameStartTimer.scheduleAtFixedRate(new TimerTask() {
 
@@ -105,26 +103,30 @@ public class SimpleEventHandler implements Listener {
                 settingsInventory.setItem(10,listPaper);
                 settingsInventory.setItem(11,randomToogleComparator);
 
-                whoClicked1.openInventory(settingsInventory);
+                whoClicked.openInventory(settingsInventory);
 
             }
         } else if (electronicArts.getInventory().equals(settingsInventory)) {
             electronicArts.setCancelled(true);
 
             if (electronicArts.getSlot() == 10) {
-                ItemListLoad.openItemListInventory(whoClicked1, items);
+                ItemListLoad.openItemListInventory(whoClicked, items);
             } else if (electronicArts.getSlot() == 11) {
 
-                if (randomChoosing) {
-                    plugin.getConfig().set("randomItemChoosing", false);
-                    comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Admin is choosing"})));
+                if (Configuration.randomChoosing) {
+                    Configuration.randomChoosing = false;
+                    comparatorMeta.setLore(new ArrayList<String>(
+                            Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Admin is choosing"})
+                    ));
                     settingsInventory.setItem(11,randomToogleComparator);
-                    whoClicked1.openInventory(settingsInventory);
-                } else if (!randomChoosing) {
-                    plugin.getConfig().set("randomItemChoosing", true);
-                    comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Choosing randomly"})));
+                    whoClicked.openInventory(settingsInventory);
+                } else if (!Configuration.randomChoosing) {
+                    Configuration.randomChoosing = true;
+                    comparatorMeta.setLore(new ArrayList<String>(
+                            Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Choosing randomly"}))
+                    );
                     settingsInventory.setItem(11,randomToogleComparator);
-                    whoClicked1.openInventory(settingsInventory);
+                    whoClicked.openInventory(settingsInventory);
                 }
 
             }

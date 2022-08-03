@@ -2,7 +2,10 @@ package org.andorvini;
 
 import org.andorvini.Commands.AddItem;
 import org.andorvini.Commands.ControlGUI;
+import org.andorvini.Commands.Debug;
+import org.andorvini.Commands.DebugStop;
 import org.andorvini.EventHandlers.SimpleEventHandler;
+
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +32,6 @@ public class Main extends JavaPlugin implements Listener {
         items.add(stone);
 
         // Config Files
-        getConfig().addDefault("randomItemChoosing",true);
         getConfig().addDefault("items",items);
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -37,6 +39,8 @@ public class Main extends JavaPlugin implements Listener {
         // Commands
         getServer().getPluginCommand("controlpanel").setExecutor(new ControlGUI(this));
         getServer().getPluginCommand("additem").setExecutor(new AddItem(this));
+        getServer().getPluginCommand("debug").setExecutor(new Debug());
+        getServer().getPluginCommand("debugstop").setExecutor(new DebugStop());
 
         // EventHadlers
         getServer().getPluginManager().registerEvents(new SimpleEventHandler(this),this);

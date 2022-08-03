@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
@@ -17,18 +18,31 @@ public class GameController {
 
     private static final JavaPlugin plugin = Main.plugin;
 
-    static Inventory itemChoosingGUI = Bukkit.createInventory(null,44,"Choose an item:");
+    public static Inventory itemChoosingGUI = Bukkit.createInventory(null,45,"Choose an item:");
 
-    public static void GameStart(Collection<? extends Player> players, World world) {
+    public static void GameStart(Collection<? extends Player> players, World world, HumanEntity whoClicked) {
 
-        int i = 0;
+        if (!Configuration.randomChoosing) {
 
-        if (plugin.getConfig().getBoolean("randomItemChoosing")) {
+            ArrayList<ItemStack> items = (ArrayList<ItemStack>) plugin.getConfig().get("items");
+            int i = 0;
 
-        } else if (!plugin.getConfig().getBoolean("randomItemChoosing")) {
+            for (ItemStack item : items) {
+                itemChoosingGUI.setItem(i, item);
+                i++;
+                if (i == items.size() || i == 45) {
+                    break;
+                }
+            }
 
+            whoClicked.openInventory(itemChoosingGUI);
+
+        } else if (Configuration.randomChoosing) {
+            int randomItem = new Random().nextInt(((ArrayList<ItemStack>)plugin.getConfig().get("items")).size());
+            ItemStack item = (ItemStack) ((ArrayList<?>) plugin.getConfig().get("items")).get(randomItem);
+
+            RunGame(item, players, world);
         }
-
     }
 
     public static void RunGame(ItemStack item, Collection<? extends Player> players, World world) {
@@ -38,6 +52,8 @@ public class GameController {
                 double x = Math.random() * 2000 - 1000;
                 double y = new Random().nextInt(256);
                 double z = Math.random() * 2000 - 1000;
+
+                plugin.getServer().getPlayer("Andorvini").sendMessage(String.valueOf(item));
 
                 Location locationRandom = new Location(world, x, y, z);
                 Block highestBlock = world.getHighestBlockAt(locationRandom);

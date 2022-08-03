@@ -9,3 +9,9 @@
       additem:
           description: Adds item into array
           usage: /<command>
+      debug:
+          description: Debug
+          usage: /<command>
+      debugstop:
+          description: Debug
+          usage: /<command>
