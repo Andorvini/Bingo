@@ -1,6 +1,7 @@
 package org.andorvini.Commands;
 
 import org.andorvini.Main;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -21,12 +22,12 @@ public class AddItem implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String pizda, String[] arguments) {
+    public boolean onCommand(CommandSender commandSender, Command command, String strings, String[] arguments) {
         ArrayList<ItemStack> itemsCopy = Main.items;
 
         if (!(commandSender instanceof Player)) { return true; }
 
-        if (strings.length != 0) { return false; }
+        if (arguments.length != 0) { return false; }
 
         if (!commandSender.isOp()) {
             commandSender.sendMessage(ChatColor.RED + "Вы не админ (не смешарик)");

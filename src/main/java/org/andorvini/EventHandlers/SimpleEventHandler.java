@@ -87,7 +87,7 @@ public class SimpleEventHandler implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    GameController.GameStart(players, plugin.getServer().getWorld("world"));
+                                    GameController.GameStart(players, plugin.getServer().getWorld("world"),whoClicked);
                                 }
                             }.runTask(plugin);
 
