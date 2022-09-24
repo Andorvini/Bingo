@@ -46,9 +46,9 @@ public class SimpleEventHandler implements Listener {
         comparatorMeta.setDisplayName(ChatColor.GREEN.toString() + ChatColor.BOLD + "Toogle Random Item Choosing");
 
         if (Configuration.randomChoosing) {
-            comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Choosing randomly"})));
+            comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Choosing randomly"})));
         } else if (!Configuration.randomChoosing) {
-            comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Admin is choosing"})));
+            comparatorMeta.setLore(new ArrayList<String>(Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Admin is choosing"})));
         }
 
         randomToogleComparator.setItemMeta(comparatorMeta);
@@ -118,6 +118,7 @@ public class SimpleEventHandler implements Listener {
                     comparatorMeta.setLore(new ArrayList<String>(
                             Arrays.asList(new String[]{ChatColor.YELLOW.toString() + ChatColor.BOLD + "Admin is choosing"})
                     ));
+                    randomToogleComparator.setItemMeta(comparatorMeta);
                     settingsInventory.setItem(11,randomToogleComparator);
                     whoClicked.openInventory(settingsInventory);
                 } else if (!Configuration.randomChoosing) {
@@ -125,6 +126,7 @@ public class SimpleEventHandler implements Listener {
                     comparatorMeta.setLore(new ArrayList<String>(
                             Arrays.asList(new String[]{ChatColor.RED.toString() + ChatColor.BOLD + "Choosing randomly"}))
                     );
+                    randomToogleComparator.setItemMeta(comparatorMeta);
                     settingsInventory.setItem(11,randomToogleComparator);
                     whoClicked.openInventory(settingsInventory);
                 }
